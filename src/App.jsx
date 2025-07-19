@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import 'bulma/css/bulma.css';
 import './App.scss';
 import { useState } from 'react';
@@ -23,7 +22,7 @@ export const App = () => {
   const [sortType, setSortType] = useState('');
 
   const handleSortAlphabetically = () => {
-    const sorted = [...goods].sort((a, b) => b.localeCompare(a));
+    const sorted = [...goods].sort((a, b) => a.localeCompare(b));
 
     if (isReversed) {
       sorted.reverse();
@@ -34,14 +33,18 @@ export const App = () => {
   };
 
   const handleSortLen = () => {
-    const sorted = [...goods].sort((a, b) => b.length - a.length);
+    const sorted = [...goods].sort((a, b) => {
+      const lengthDiff = a.length - b.length;
+
+      return lengthDiff !== 0 ? lengthDiff : a.localeCompare(b);
+    });
 
     if (isReversed) {
       sorted.reverse();
     }
 
     setGoods(sorted);
-    setSortType('length');
+    setSortType('len');
   };
 
   const handleReverse = () => {
@@ -73,7 +76,7 @@ export const App = () => {
         <button
           type="button"
           className={classNames('button is-success', {
-            'is-light': sortType !== 'length',
+            'is-light': sortType !== 'len',
           })}
           onClick={handleSortLen}
         >
